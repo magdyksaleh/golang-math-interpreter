@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-   "os"
+	"os"
 )
 
 func main() {
@@ -15,7 +15,9 @@ func main() {
 		fmt.Print("-> ")
 		text, _ := reader.ReadString('\n')
 		lexer := NewLexer(text)
-	   ParseText(lexer)
+		Tokens := ParseText(lexer)
+		parser := NewParser(Tokens)
+		Parse(parser)
 		break
 	}
 

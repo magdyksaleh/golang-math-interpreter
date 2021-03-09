@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -13,15 +12,15 @@ const (
 )
 
 const (
-	unknown TokenType = iota
-	NUMBER
-	PLUS
-	MINUS
-	MULTIPLY
-	DIVIDE
-	LPAREN
-	RPAREN
-	sentinel
+	unknown_TOKEN TokenType = iota
+	NUMBER_TOKEN
+	PLUS_TOKEN
+	MINUS_TOKEN
+	MULTIPLY_TOKEN
+	DIVIDE_TOKEN
+	LPAREN_TOKEN
+	RPAREN_TOKEN
+	sentinel_TOKEN
 )
 
 type Token struct {
@@ -30,9 +29,9 @@ type Token struct {
 }
 
 type Lexer struct {
-	Pos          int
-	RawText      []rune
-	Tokens       []Token
+	Pos     int
+	RawText []rune
+	Tokens  []Token
 }
 
 func IsDigitChar(c rune) bool {
@@ -72,37 +71,37 @@ func GenerateNumberToken(lexer *Lexer) Token {
 	if strings.HasSuffix(NumberString, ".") {
 		NumberString += "0"
 	}
-	return Token{NUMBER, NumberString}
+	return Token{NUMBER_TOKEN, NumberString}
 }
 
 func GenerateSymbolToken(lexer *Lexer) (token Token) {
-   switch {
-      case strings.ContainsRune("+", lexer.RawText[lexer.Pos]):
-         token = Token{TokenType: PLUS}
-      case strings.ContainsRune("-", lexer.RawText[lexer.Pos]):
-         token = Token{TokenType: MINUS}
-      case strings.ContainsRune("*", lexer.RawText[lexer.Pos]):
-         token = Token{TokenType: MULTIPLY}
-      case strings.ContainsRune("/", lexer.RawText[lexer.Pos]):
-         token = Token{TokenType: DIVIDE}
-      case strings.ContainsRune("(", lexer.RawText[lexer.Pos]):
-         token = Token{TokenType: LPAREN}
-      case strings.ContainsRune(")", lexer.RawText[lexer.Pos]):
-         token = Token{TokenType: RPAREN}
-		}
-      return
+	switch {
+	case strings.ContainsRune("+", lexer.RawText[lexer.Pos]):
+		token = Token{TokenType: PLUS_TOKEN}
+	case strings.ContainsRune("-", lexer.RawText[lexer.Pos]):
+		token = Token{TokenType: MINUS_TOKEN}
+	case strings.ContainsRune("*", lexer.RawText[lexer.Pos]):
+		token = Token{TokenType: MULTIPLY_TOKEN}
+	case strings.ContainsRune("/", lexer.RawText[lexer.Pos]):
+		token = Token{TokenType: DIVIDE_TOKEN}
+	case strings.ContainsRune("(", lexer.RawText[lexer.Pos]):
+		token = Token{TokenType: LPAREN_TOKEN}
+	case strings.ContainsRune(")", lexer.RawText[lexer.Pos]):
+		token = Token{TokenType: RPAREN_TOKEN}
+	}
+	return
 }
 
-func ParseText(lexer *Lexer) []Tokens {
+func ParseText(lexer *Lexer) []Token {
 	for lexer.Pos >= 0 {
 		if IsDigitChar(lexer.RawText[lexer.Pos]) {
-         lexer.Tokens = append(lexer.Tokens, GenerateNumberToken(lexer))
-      } else {
-         if !strings.ContainsRune(WHITESPACE, lexer.RawText[lexer.Pos]) {
-            lexer.Tokens = append(lexer.Tokens, GenerateSymbolToken(lexer))
-         }
-		   AdvanceLexer(lexer)
-      }
+			lexer.Tokens = append(lexer.Tokens, GenerateNumberToken(lexer))
+		} else {
+			if !strings.ContainsRune(WHITESPACE, lexer.RawText[lexer.Pos]) {
+				lexer.Tokens = append(lexer.Tokens, GenerateSymbolToken(lexer))
+			}
+			AdvanceLexer(lexer)
+		}
 	}
-   return lexer.Tokens
+	return lexer.Tokens
 }

@@ -17,8 +17,8 @@ func main() {
 		lexer := NewLexer(text)
 		Tokens := ParseText(lexer)
 		parser := NewParser(Tokens)
-      RootNode := Parse(parser)
-      val := InterpretTree(RootNode)
+		RootNode := Parse(parser)
+		val := InterpretTree(RootNode)
 		fmt.Println(val)
 	}
 }

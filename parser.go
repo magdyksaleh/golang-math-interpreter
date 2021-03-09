@@ -1,7 +1,7 @@
 package main
 
 import (
-   "fmt"
+	"fmt"
 	"strconv"
 )
 
@@ -58,7 +58,7 @@ func ParseFactor(parser *Parser) (FactorNode *Node) {
 		}
 		AdvanceParser(parser)
 	case parser.CurrentToken.TokenType == NUMBER_TOKEN:
-      fValue, _ := strconv.ParseFloat(parser.CurrentToken.Value, 32)
+		fValue, _ := strconv.ParseFloat(parser.CurrentToken.Value, 32)
 		FactorNode = &Node{NodeType: NUMBER_NODE, Value: fValue}
 		AdvanceParser(parser)
 	case parser.CurrentToken.TokenType == PLUS_TOKEN:
@@ -68,7 +68,7 @@ func ParseFactor(parser *Parser) (FactorNode *Node) {
 		AdvanceParser(parser)
 		FactorNode = &Node{NodeType: MINUS_NODE, Nodes: []*Node{ParseFactor(parser)}}
 	}
-   return
+	return
 }
 
 func ParseTerm(parser *Parser) *Node {
@@ -106,35 +106,35 @@ func ParseExpression(parser *Parser) *Node {
 }
 
 func StringTree(node *Node) (exprStr string) {
-   if len(node.Nodes) == 2 {
-      lstring := StringTree(node.Nodes[0])
-      var OpsString string
-      switch node.NodeType {
-      case ADD_NODE:
-         OpsString = "+"
-      case SUB_NODE:
-         OpsString = "-"
-      case MUL_NODE:
-         OpsString = "*"
-      case DIV_NODE:
-         OpsString = "/"
-      }
-      rstring := StringTree(node.Nodes[1])
-      exprStr = "(" + lstring + OpsString +  rstring + ")"
-   } else if len(node.Nodes) == 1 {
-      rstring := StringTree(node.Nodes[0])
-      var OpsString string
-      switch node.NodeType {
-      case PLUS_NODE:
-         OpsString = "+"
-      case MINUS_NODE:
-         OpsString = "-"
-      }
-      exprStr = "(" + OpsString + rstring + ")"
-   } else {
-      exprStr = fmt.Sprintf("%.2f", node.Value)
-   }
-   return
+	if len(node.Nodes) == 2 {
+		lstring := StringTree(node.Nodes[0])
+		var OpsString string
+		switch node.NodeType {
+		case ADD_NODE:
+			OpsString = "+"
+		case SUB_NODE:
+			OpsString = "-"
+		case MUL_NODE:
+			OpsString = "*"
+		case DIV_NODE:
+			OpsString = "/"
+		}
+		rstring := StringTree(node.Nodes[1])
+		exprStr = "(" + lstring + OpsString + rstring + ")"
+	} else if len(node.Nodes) == 1 {
+		rstring := StringTree(node.Nodes[0])
+		var OpsString string
+		switch node.NodeType {
+		case PLUS_NODE:
+			OpsString = "+"
+		case MINUS_NODE:
+			OpsString = "-"
+		}
+		exprStr = "(" + OpsString + rstring + ")"
+	} else {
+		exprStr = fmt.Sprintf("%.2f", node.Value)
+	}
+	return
 }
 
 func Parse(parser *Parser) *Node {
@@ -147,6 +147,6 @@ func Parse(parser *Parser) *Node {
 	if parser.CurrentToken != nil {
 		panic("Syntax Error")
 	}
-   fmt.Println(StringTree(RootNode))
+	fmt.Println(StringTree(RootNode))
 	return RootNode
 }
